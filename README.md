@@ -2,8 +2,16 @@
 
 # 허락 받지 않은 2차 공유를 금지합니다
 
+# Unauthorized secondary sharing is prohibited.
 
-# exam.py과 RegisterDevice.py 의 uuid를 변경하고 하세요.
+# Warning
+
+
+## 이 소프트웨어를 사옹하여 받는 법적 책임은 모두 사용한 자신에게 있습니다.
+## The legal responsibility of buying and receiving this software rests with you.
+
+
+## ## exam.py과 RegisterDevice.py 의 uuid를 변경하고 진행하세요
 # SETUP(Windows)
 1. Install python3
 2. Run cmd

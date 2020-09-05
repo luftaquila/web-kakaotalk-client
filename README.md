@@ -11,7 +11,11 @@
 ## The legal responsibility of buying and receiving this software rests with you.
 
 
-## ## exam.py과 RegisterDevice.py 의 uuid를 변경하고 진행하세요
+## exam.py과 RegisterDevice.py 의 uuid를 변경하고 진행하세요
+
+```
+```
+
 # SETUP(Windows)
 1. Install python3
 2. Run cmd

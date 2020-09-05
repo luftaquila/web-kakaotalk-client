@@ -6,8 +6,15 @@
 
 # Warning
 
-## 이 소프트웨어를 사용하여 받는 법적 책임은 모두 사용한 자신에게 있습니다.
+
+## 이 소프트웨어를 사옹하여 받는 법적 책임은 모두 사용한 자신에게 있습니다.
 ## The legal responsibility of buying and receiving this software rests with you.
+
+
+
+```
+  만들어주신 Nua님 감사합니다
+```
 
 # SETUP(Windows)
 1. Install python3

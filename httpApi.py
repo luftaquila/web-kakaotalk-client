@@ -4,9 +4,16 @@ import json
 
 Agent = "win32"
 Lang = "ko"
+Version = "3.1.9"
+AppVersion = "3.1.9.2626"
+OsVersion = "10.0"
+'''
+Agent = "win32"
+Lang = "ko"
 Version = "3.1.1"
 AppVersion = "3.1.1.2441"
 OsVersion = "10.0"
+'''
 
 AuthHeader = "{agent}/{version}/{lang}".format(
     agent=Agent, version=Version, lang=Lang)
@@ -62,7 +69,7 @@ def RegisterDevice(email, password, device_name, device_uuid, passcode):
         "passcode": passcode
     })
 
-    return r.content.decode()
+    return r.content#.decode()
 
 
 def Login(email, password, device_name, device_uuid):
@@ -124,6 +131,8 @@ def postText(chatId, li, text, notice, accessKey, deviceUUID):
 
 
 def getXVC(email, device_uuid, isFull=False):
+    # ${config.xvcSeedList[0]}|${userAgent}|${config.xvcSeedList[1]}|${email}|${this.deviceUUID}
+
     hash = hashlib.sha512("HEATH|{}|DEMIAN|{}|{}".format(
         AuthUserAgent, email, device_uuid).encode("utf-8")).hexdigest()
     if(isFull):

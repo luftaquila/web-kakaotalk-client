@@ -1,15 +1,17 @@
 import httpApi
 
-user_id = str(input("ID: "))
-user_pw = str(input("PW: "))
+user_id = 'luftaquila@protonmail.ch' #str(input("ID: "))
+user_pw = 'rokaFKAk512#' #str(input("PW: "))
 
-device_name = "DEVICE"
-user_uuid = "REVWSUNFMQ=="
+device_name = "SERVER"
+user_uuid = "c2VydmVyMQ=="
 
-httpApi.RequestPasscode(user_id, user_pw,
-                        device_name, user_uuid)
+httpApi.RequestPasscode(user_id, user_pw, device_name, user_uuid)
 
 passcode = str(input("Input Passcode : "))
 
-httpApi.RegisterDevice(user_id, user_pw,
-                       device_name, user_uuid, passcode)
+res = httpApi.RegisterDevice(user_id, user_pw, device_name, user_uuid, passcode)
+print(res)
+
+res = httpApi.Login(user_id, user_pw, device_name, user_uuid)
+print(res)

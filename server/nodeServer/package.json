@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "node-kakao": "^3.1.4"
+    "dateformat": "^4.3.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mariadb": "^2.5.2",
+    "node-kakao": "^3.1.4",
+    "winston": "^3.3.3"
   },
   "devDependencies": {},
   "scripts": {

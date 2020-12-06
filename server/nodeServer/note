@@ -1,3 +1,9 @@
+client.channelManager => 채팅창 목록?
+client.userManager => 친구 목록?
+
+
+
+
 TextChat {                                                                                    
   rawAttachment: {},                                                                          
   channel: ManagedNormalChatChannel {                                                         

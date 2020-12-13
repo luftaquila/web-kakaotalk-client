@@ -70,13 +70,14 @@ async function addNewChatChannel(chat) {
 
 async function addNewFriend(chat) {
   // request friend info
-  let member = chat.channel.userInfoMap.get(String(chat.sender.id)).memberStruct;
-  let profile = await client.service.requestProfile(chat.sender.id);
+  let member = chat.Channel.getUserInfo(chat.Sender).memberStruct;
+  
+  //let lastSeenAt = await client.service.requestProfile(chat.sender.id).lastSeenAt;
 
   // insert user info to `friendsList` table
   await query("INSERT INTO " +
-    "`friendsList`(`userId`, `name`, `profileImageurl`, `lastSeenAt`)" +
-    " VALUES(" + pool.escape(chat.sender.id) + ", " + pool.escape(member.nickname) + ", " + pool.escape(member.profileImageUrl) + ", " + pool.escape(profile.lastSeenAt) + ");"
+    "`friendsList`(`userId`, `name`, `profileImageurl`)" +
+    " VALUES(" + pool.escape(chat.sender.id) + ", " + pool.escape(member.nickname) + ", " + pool.escape(member.profileImageUrl) + ");"
   );
 }
 

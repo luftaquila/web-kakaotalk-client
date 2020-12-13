@@ -8,6 +8,14 @@ const jwt = require('jsonwebtoken');
 const socketJWT = require('socketio-jwt');
 
 
+  
+  //https://github.com/storycraft/node-kakao/search?q=mark MARK READ
+  
+  let target = await client.userManager.map.get('246786864').createDM()
+  let channel = await target.result.sendText('test');
+  
+  let targetChannel = await client.channelManager.map.get('293729341839798').sendText('hi')//.createDM()
+
 
 app.get('/', async function(req, res) {
   

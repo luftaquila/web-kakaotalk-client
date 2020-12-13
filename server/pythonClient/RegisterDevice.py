@@ -1,21 +1,21 @@
 import httpApi
 
-user_id = 'luftaquila@protonmail.ch' #str(input("ID: "))
-user_pw = 'rokaFKAk512#' #str(input("PW: "))
+user_id = '01063971887' #str(input("ID: "))
+user_pw = 'luftaquila1!' #str(input("PW: "))
 
 device_name = "SERVER"
-user_uuid = "c2VydmVyMQ=="
-'''
+user_uuid = "bHVmdGFxdWlsYTEh"
+
 httpApi.RequestPasscode(user_id, user_pw, device_name, user_uuid)
 
 passcode = str(input("Input Passcode : "))
 
 res = httpApi.RegisterDevice(user_id, user_pw, device_name, user_uuid, passcode)
 print(res)
-'''
+
 res = httpApi.Login(user_id, user_pw, device_name, user_uuid)
 print(res)
-
+'''
 {
   "status":0,
   "userId":246786864,
@@ -32,3 +32,4 @@ print(res)
   "mainDeviceAgentName":"android",
   "mainDeviceAppVersion":"9.1.3"
 }
+'''

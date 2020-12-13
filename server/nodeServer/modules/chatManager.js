@@ -1,5 +1,6 @@
 const chat_type = require("../node_modules/node-kakao/dist/talk/chat/chat-type.js");
 this.chatManager = async (chat) => {
+  console.log(chat.text);
   // if target channel is never seen before
   let isChannelSeenBefore = await query("SELECT * FROM `chatChannelList` WHERE `channelId`=" + pool.escape(chat.channel.id) + ";");
   if(!isChannelSeenBefore.length) await addNewChatChannel(chat);
@@ -69,13 +70,13 @@ async function addNewChatChannel(chat) {
 
 async function addNewFriend(chat) {
   // request friend info
+  let member = chat.channel.userInfoMap.get(String(chat.sender.id)).memberStruct;
   let profile = await client.service.requestProfile(chat.sender.id);
-  let info = await client.service.findFriendById(chat.sender.id);
 
   // insert user info to `friendsList` table
   await query("INSERT INTO " +
     "`friendsList`(`userId`, `name`, `profileImageurl`, `lastSeenAt`)" +
-    " VALUES(" + pool.escape(chat.sender.id) + ", " + pool.escape(info.friend.nickName) + ", " + pool.escape(info.friend.profileImageUrl) + ", " + pool.escape(profile.lastSeenAt) + ");"
+    " VALUES(" + pool.escape(chat.sender.id) + ", " + pool.escape(member.nickname) + ", " + pool.escape(member.profileImageUrl) + ", " + pool.escape(profile.lastSeenAt) + ");"
   );
 }
 

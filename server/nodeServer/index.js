@@ -1,24 +1,24 @@
 require('dotenv').config();
-const request = require('request');
-const express = require('express');
-const mariadb = require('mariadb');
-const winston = require('winston');
-const dateformat = require('dateformat');
-const bodyParser = require('body-parser');
 
+const winston = require('winston');
+
+const mariadb = require('mariadb');
 global.pool = mariadb.createPool({
   host: 'localhost', 
   user: process.env.DB_User,
   password: process.env.DB_PW,
   database: 'kakao',
+  charset: 'utf8mb4',
   idleTimeout: 0
 });
+
+require('./modules/webServer.js')
 
 const nodeKakao = require('node-kakao');
 global.client = new nodeKakao.TalkClient(process.env.TalkClientName, process.env.TalkClientUUID);
 
-client.login(process.env.TalkClientLoginID, process.env.TalkClientLoginPW, true)
-  .then(main)
+
+client.login(process.env.TalkClientLoginID, process.env.TalkClientLoginPW, true).then(main)
   //.catch(err => { console.error(`Login Attempt failed. status: ${err.status}, msg: ${err.message}`); });
 
 function main() {
@@ -35,8 +35,7 @@ function main() {
   
   // Incoming message event handler
   client.on('message', async chat => {
-    require('./modules/ajoumeowBot.js').autoVerify(chat);
-    require('./modules/webClient.js').chatManager(chat);
+    require('./modules/chatManager.js').chatManager(chat);
   });
   
   // Message read event handler
@@ -44,6 +43,7 @@ function main() {
 
   });
 }
+
 
 if (process.env.NODE_ENV !== "production") {
   const chokidar = require("chokidar");
@@ -54,38 +54,3 @@ if (process.env.NODE_ENV !== "production") {
     console.log(relative_path + ' reloaded.');
   });
 }
-
-var dateFormat = function () {
-  var	token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
-      pad = function (val, len) {
-        val = String(val);
-        len = len || 2;
-        while (val.length < len) val = "0" + val;
-        return val;
-      };
-  return function (date, mask, utc) {
-    var dF = dateFormat;
-    if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
-      mask = date;
-      date = undefined;
-    }
-    date = date ? new Date(date) : new Date;
-    var	_ = utc ? "getUTC" : "get",
-      d = date[_ + "Date"](),
-      m = date[_ + "Month"](),
-      y = date[_ + "FullYear"](),
-      flags = {
-        d:    d,
-        dd:   pad(d),
-        m:    m + 1,
-        mm:   pad(m + 1),
-        yyyy: y,
-      };
-    return mask.replace(token, function ($0) {
-      return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
-    });
-  };
-}();
-Date.prototype.format = function (mask, utc) { return dateFormat(this, mask, utc); };
-Date.prototype.getDayNum = function() { return this.getDay() ? this.getDay() : 7; }
-  

@@ -12,8 +12,6 @@ global.pool = mariadb.createPool({
   idleTimeout: 0
 });
 
-require('./modules/webServer.js')
-
 const nodeKakao = require('node-kakao');
 global.client = new nodeKakao.TalkClient(process.env.TalkClientName, process.env.TalkClientUUID);
 
@@ -23,6 +21,7 @@ client.login(process.env.TalkClientLoginID, process.env.TalkClientLoginPW, true)
 
 function main() {
   console.log('Login successful. Main client is in startup.');
+  require('./modules/webServer.js'); // deploy express and socket server
   /*
   // Update friends list
   console.log(client.Auth.getLatestAccessData())
@@ -35,7 +34,7 @@ function main() {
   
   // Incoming message event handler
   client.on('message', async chat => {
-    require('./modules/chatManager.js').chatManager(chat);
+    require('./modules/webServer.js').chatManager(chat);
   });
   
   // Message read event handler
@@ -44,7 +43,7 @@ function main() {
   });
 }
 
-
+/*
 if (process.env.NODE_ENV !== "production") {
   const chokidar = require("chokidar");
   const watcher = chokidar.watch("./modules");
@@ -54,3 +53,4 @@ if (process.env.NODE_ENV !== "production") {
     console.log(relative_path + ' reloaded.');
   });
 }
+*/

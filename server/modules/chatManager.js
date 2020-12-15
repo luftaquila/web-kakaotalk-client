@@ -1,40 +1,21 @@
 const chat_type = require("../node_modules/node-kakao/dist/talk/chat/chat-type.js");
-this.chatManager = async (chat) => {
-  console.log(chat.text);
-  // if target channel is never seen before
-  let isChannelSeenBefore = await query("SELECT * FROM `chatChannelList` WHERE `channelId`=" + pool.escape(chat.channel.id) + ";");
-  if(!isChannelSeenBefore.length) await addNewChatChannel(chat);
 
-  // if target sender is never seen before
-  let isFriendSeenBefore = await query("SELECT * FROM `friendsList` WHERE `userId`=" + pool.escape(chat.sender.id) + ";");
-  if(!isFriendSeenBefore.length && chat.sender.id != 246786864) await addNewFriend(chat);
-
-  // add chat log
-  await addChatLog(chat);
-  
-  // other chat handlers
-
-  /*
-  if(chat.sender.id != 246786864 && chat.channel.dataStruct.type == 'DirectChat') {
-    //chat.channel.sendText('Incoming message detected. content: ' + chat.text);
-    if(chat.channel.dataStruct.channelId == 174726625044834) { } // 최서원
-    //else if(chat.channel.dataStruct.channelId == 205241728180694) { } // 박세진
-    else {
-      chat.markChatRead();
-      let delay = Math.random();
-      setTimeout(() => {
-        chat.channel.sendText('Incoming message detected.\nContent: ' + chat.text + '\nReply delay: ' + Math.round(delay * 1000) + 'ms');
-      }, delay * 1000);
-    }
+async function checkChannelSeenBefore(chat) {
+  let is = await query("SELECT * FROM `chatChannelList` WHERE `channelId`=" + pool.escape(chat.channel.id) + ";");
+  if(!is.length) {
+    await addNewChatChannel(chat);
+    return false;
   }
-  */
+  else return true;
 }
 
-this.readManager = (channel, reader, readChatLogId) => {
-  console.log('----------------channel-------------------');
-  console.log(channel)
-  console.log(reader)
-  console.log(readChatLogId)
+async function checkSenderSeenBefore(chat) {
+  let is = await query("SELECT * FROM `friendsList` WHERE `userId`=" + pool.escape(chat.sender.id) + ";");
+  if(!is.length && chat.sender.id != 246786864) {
+    await addNewFriend(chat);
+    return false;
+  }
+  else return true;
 }
 
 async function addChatLog(chat) {
@@ -93,3 +74,24 @@ async function query(queryString) {
     return result;
   }
 }
+
+
+/*
+당신은 다음과 같은 것을 할 수 있습니다 :
+
+module.exports = {
+    method: function() {},
+    otherMethod: function() {},
+};
+아니면 그냥 :
+
+exports.method = function() {};
+exports.otherMethod = function() {};
+그런 다음 호출 스크립트에서 :
+
+const myModule = require('./myModule.js');
+const method = myModule.method;
+const otherMethod = myModule.otherMethod;
+// OR:
+const {method, otherMethod} = require('./myModule.js');
+*/

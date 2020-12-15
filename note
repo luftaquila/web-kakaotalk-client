@@ -1,1 +1,69 @@
 jwt refresh on expire
+
+                  <!-- Chat Item Start -->
+                  <li class="contacts-item friends">
+                    <a class="contacts-link" href="./chat-1.html">
+                      <div class="avatar avatar-online">
+                        <img src="./../assets/media/avatar/2.png" alt="">
+                      </div>
+                      <div class="contacts-content">
+                        <div class="contacts-info">
+                          <h6 class="chat-name text-truncate">Catherine Richardson</h6>
+                          <div class="chat-time">Just now</div>
+                        </div>
+                        <div class="contacts-texts">
+                          <p class="text-truncate">I’m sorry, I didn’t catch that. Could you please repeat?</p>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- Chat Item End -->
+
+li.contacts-item
+  unread -> background glow
+  
+
+li.contacts-item > a.contacts-link > div.avatar
+  .avatar-online -> green dot on top right
+  .avatar-offline -> gray dot on top right
+  .avatar-busy -> pink
+  .avatar-away -> yellow
+  
+  .bg-success -> green background
+  .bg-info -> blue background
+  
+  .text-light -> white text
+  
+div.contacts-texts
+  => <div class="badge badge-rounded badge-primary ml-1" style="">2</div>
+  
+  
+  
+  
+ul.contacts-lists
+                  <!-- Item Series Start -->
+                  <li>
+                    <small class="font-weight-medium text-uppercase text-muted">A</small>
+                  </li>
+                  <!-- Item Series End -->
+                  
+                  <!-- friends Item Start -->
+                  <li class="contacts-item active">
+                    <a class="contacts-link" href="#">
+                      <div class="avatar">
+                        <img src="./../assets/media/avatar/3.png" alt="">
+                      </div>
+                      <div class="contacts-content">
+                        <div class="contacts-info">
+                          <h6 class="chat-name text-truncate">Albert K. Johansen</h6>
+                        </div>
+                        <div class="contacts-texts">
+                          <svg class="hw-16 text-muted mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                          </svg>
+                          <p class="text-muted mb-0">San Fransisco, CA</p>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- friends Item End -->

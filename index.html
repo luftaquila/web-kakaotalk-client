@@ -73,7 +73,15 @@
 <script src='/res/jquery-3.5.1.min.js'></script>
 <script>
   if(Cookies.get('kakaoJWT')) {
-     // request server to auth
+    $.ajax({
+      url: '/kakao/api/verify',
+      data: JSON.stringify({ token: Cookies.get('kakaoJWT') }),
+      contentType: 'application/json',
+      method: 'POST',
+      success: (res) => {
+        if(res === 'ok') window.location.href = '/kakao/main.html';
+      }
+    });
    }
   document.addEventListener('keydown', function(e) {
     if (e.keyCode == 13) {

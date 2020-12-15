@@ -178,7 +178,7 @@ $(document).ready(function () {
 
 
     // Emojione Area
-    $("#messageInput").emojioneArea();
+    //$("#messageInput").emojioneArea();
 
 });
 

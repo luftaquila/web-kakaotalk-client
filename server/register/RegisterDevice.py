@@ -1,10 +1,10 @@
 import httpApi
 
-user_id = str(input("ID: "))
-user_pw = str(input("PW: "))
+user_id = #user id
+user_pw = #user pw
 
-device_name = str(input("DEVICE NAME: "))
-user_uuid = str(input("DEVICE UUID(B64): "))
+device_name = #device name
+user_uuid = #device uuid
 
 httpApi.RequestPasscode(user_id, user_pw, device_name, user_uuid)
 

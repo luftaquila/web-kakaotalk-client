@@ -1,4 +1,4 @@
-require('./chatManager.js');
+const CM = require('./chatManager.js');
 
 const express = require('express');
 const app = express();
@@ -15,7 +15,7 @@ const io = require('socket.io')(webserver);
 //https://github.com/storycraft/node-kakao/search?q=mark MARK READ
 
 let target = await client.userManager.map.get('246786864').createDM()
-let channel = await target.result.sendText('test');
+let channel = await target.result.sendText('test'); // returns chat class
 
 let targetChannel = await client.channelManager.map.get('293729341839798').sendText('hi')//.createDM()
 */
@@ -37,7 +37,7 @@ app.post('/verify', (req, res) => {
   else res.send(null);
 });
 
-const verifyJWT = (token) => {
+const verifyJWT = token => {
   try { return jwt.verify(token, process.env.JWTSecret); }
   catch(e) { return null; }
 }
@@ -49,38 +49,28 @@ io.use(socketJWT.authorize({
   callback: false
 }));
 
-io.on('connection', (socket) => {
+io.on('connection', async socket => {
+  const channelList = await CM.query('SELECT * FROM `chatChannelList`;');
+  const friendsList = await CM.query('SELECT * FROM `friendsList`;');
+  io.emit('init', { channelList: channelList, friendsList: friendsList });
   //socket.decoded_token
   // send all chat data(x)
   // send table chatList: chatList table must have unread message counts
 });
 
+
 this.chatManager = async chat => {
+  // maybe sent from node-kakao client doesn't make chat event. self addition to DB required.
   console.log(chat.text);
   
-  let isChannelSeenBefore = await checkChannelSeenBefore(chat);
-  let isSenderSeenBefore = await checkSenderSeenBefore(chat);
-  await addChatLog(chat);
+  let isChannelSeenBefore = await CM.checkChannelSeenBefore(chat);
+  let isSenderSeenBefore = await CM.checkSenderSeenBefore(chat);
+  await CM.addChatLog(chat);
   
-  io.emit('chat');
+  if(chat.sender.id != process.env.MY_UserID)
+    io.emit('chat', { sender: chat.sender.id, channel: chat.channel.id, logId: chat.logId, sendTime: chat.sendTime , text: chat.text });
   
-  // other chat handlers
-
-  /*
-  if(chat.sender.id != 246786864 && chat.channel.dataStruct.type == 'DirectChat') {
-    //chat.channel.sendText('Incoming message detected. content: ' + chat.text);
-    if(chat.channel.dataStruct.channelId == 174726625044834) { } // 최서원
-    //else if(chat.channel.dataStruct.channelId == 205241728180694) { } // 박세진
-    else {
-      chat.markChatRead();
-      let delay = Math.random();
-      setTimeout(() => {
-        chat.channel.sendText('Incoming message detected.\nContent: ' + chat.text + '\nReply delay: ' + Math.round(delay * 1000) + 'ms');
-      }, delay * 1000);
-    }
-  }
-  */
-}          
+}
 
 this.readManager = (channel, reader, readChatLogId) => {
   console.log('----------------channel-------------------');

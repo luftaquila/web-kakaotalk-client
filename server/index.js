@@ -42,12 +42,12 @@ async function main() {
 
   });
   /*
-  let target = await client.userManager.map.get('90639365').createDM();
-  let channel = await target.result.sendText('내가 깨지는 로션을 줬나?');
-  
+  let target = await client.userManager.map.get('267020477').createDM();
+  let channel = await target.result.sendText('이런거 하는 중이야\nhttps://luftaquila.io/droppy/$/woZKQ');
+  /*
   let target = await client.channelManager.map.get('174726625044834');
   let markread = await client.channelManager.markRead(target);
-  target.sendText('아낰ㅋㅋㅋ 근데 나 이제 컴 꺼야해 ㅂㅂㅂ');
+  target.sendText('');
   */
   // @!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! channel markread doesn't work
   

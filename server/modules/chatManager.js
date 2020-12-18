@@ -39,12 +39,18 @@ async function addChatLog(chat) {
 }
 
 async function addNewChatChannel(chat) {
-  // !!!!!!!!!!!!!!!!!!!!!!!!!! name and roomImageUrl not working
-  // maybe name must be friends name if DirectChat
   // insert channel info to `chatChannelList` table
+  
+  let channelNotice = chat.channel.ChannelMetaList.find(o => o.type == 1); // find notice
+  channelNotice = channelNotice ? channelNotice.content : undefined;
+  
+  let userList = [];
+  chat.channel.DisplayUserInfoList.forEach(o => { o.displayStruct.userId = o.displayStruct.userId.toNumber(); userList.push(o.displayStruct) });
+  userList = JSON.stringify(userList);
+  
   await query("INSERT INTO " +
-    "`chatChannelList`(`channelId`, `name`, `type`, `userCount`, `lastChatText`, `lastChatTime`, `newMessageCount`, `roomImageUrl`)" +
-    " VALUES(" + pool.escape(chat.channel.id) + ", " + pool.escape(chat.channel.Name) + ", " + pool.escape(chat.channel.Type) + ", " + pool.escape(chat.channel.UserCount) + ", " + pool.escape(chat.text) + ", " + pool.escape(chat.sendTime) + ", " + pool.escape(chat.channel.dataStruct.newMessageCount) + ", " + pool.escape(chat.channel.RoomImageURL) + ");"
+    "`chatChannelList`(`channelId`, `name`, `type`, `userCount`, `userList`, `lastChatText`, `lastChatTime`, `newMessageCount`, `roomImageUrl`, `notice`)" +
+    " VALUES(" + pool.escape(chat.channel.id) + ", " + pool.escape(chat.channel.getDisplayName()) + ", " + pool.escape(chat.channel.Type) + ", " + pool.escape(chat.channel.UserCount) + ", " + pool.escape(userList) + ", " + pool.escape(chat.text) + ", " + pool.escape(chat.sendTime) + ", " + pool.escape(chat.channel.dataStruct.newMessageCount) + ", " + pool.escape(chat.channel.RoomImageURL) + ", " + pool.escape(channelNotice) + ");"
   );
 
   // create channel table

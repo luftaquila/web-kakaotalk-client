@@ -33,7 +33,6 @@ function main() {
 function renderFriendsTab(friendsList) {
   const target = $('#friendsTab');
   friendsList = friendsList.sort((a, b) => a.name.localeCompare(b.name));
-  
   /* 가나다순 초성별 정렬
   const startLetters = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
   
@@ -66,12 +65,13 @@ function renderFriendsTab(friendsList) {
 }
 
 function renderChannelTab(channelList) {
-  const target = $('#chatContactsList');
-  console.log(channelList);
+  const target = $('#chatContactTab');
   channelList = channelList.sort((a, b) => parseFloat(b.lastChatTime) - parseFloat(a.lastChatTime));
-  
-  console.log(channelList);
+  console.log(channelList)
+  abc = channelList
   for(let channel of channelList) {
+    const chatTime = new Date(channel.lastChatTime * 1000);
+    const isChatTimeToday = chatTime.toDateString() == new Date().toDateString();
     const htmlStr = `
       <!-- Chat Item Start -->
       <li class="contacts-item friends" data-channelId="${channel.channelId}">
@@ -82,7 +82,7 @@ function renderChannelTab(channelList) {
           <div class="contacts-content">
             <div class="contacts-info">
               <h6 class="chat-name text-truncate">${channel.name}</h6>
-              <div class="chat-time">Just now</div>
+              <div class="chat-time">${isChatTimeToday ? chatTime.format('HH:mm') : chatTime.format('m월 d일')}</div>
             </div>
             <div class="contacts-texts">
               <p class="text-truncate">${channel.lastChatText}</p>
@@ -94,3 +94,4 @@ function renderChannelTab(channelList) {
     target.append(htmlStr);
   }
 }
+

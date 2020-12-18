@@ -1,5 +1,89 @@
-client.channelManager => 채팅창 목록?
-client.userManager => 친구 목록?
+chat.channel.Name                                                                             
+                                                                                              
+                                                                                              
+chat.channel.RoomImageURL                                                                     
+                                                                                              
+                                                                                              
+chat.channel.ClientName                                                                       
+                                                                                              
+                                                                                              
+chat.channel.ClientRoomImageURL                                                               
+                                                                                              
+                                                                                              
+chat.channel.ChannelMetaList                                                                  
+[                                                                                             
+  {                                                                                           
+    type: 1,
+    revision: Long("2129404871096330240"),                                                    
+    authorId: Long("90639365"),                                                               
+    content: '경남 진주시 금산면 송백로 46, 사서함 306-34호 군수2학교 학생대대 806기 일반차량운전과정(46310) 이병 오병준',
+    updatedAt: 1574782041
+  }                                                                                           
+]                                                                                             
+                                                                                              
+chat.channel.DisplayUserInfoList                                                              
+[                                                                                             
+  ManagedDisplayUserInfo {                                                                    
+    user: ManagedChatUser {                                                                   
+      _events: [Object: null prototype] {},                                                   
+      _eventsCount: 0,
+      _maxListeners: undefined,                                                               
+      manager: [UserManager],
+      id: Long("90639365"),                                                                   
+      [Symbol(kCapture)]: false
+    },                                                                                        
+    displayStruct: {                                                                          
+      userId: Long("90639365"),                                                               
+      nickname: '최서원',
+      profileImageUrl: undefined                                                              
+    }                                                                                         
+  }                                                                                           
+]                                                                                             
+                                                                                              
+chat.channel.getDisplayName                                                                   
+최서원                                                                                           
+                                                                                              
+chat.channel.getDisplayProfileList                                                            
+[ undefined ]                                                                                 
+                                                                                              
+chat.channel.getUserInfoList                                                                  
+[                                                                                             
+  ManagedChatUserInfo {                                                                       
+    manager: UserManager { map: [Map], client: [TalkClient] },
+    user: ManagedChatUser {                                                                   
+      _events: [Object: null prototype] {},                                                   
+      _eventsCount: 0,
+      _maxListeners: undefined,                                                               
+      manager: [UserManager],
+      id: Long("90639365"),                                                                   
+      [Symbol(kCapture)]: false
+    },                                                                                        
+    memberStruct: {                                                                           
+      userId: Long("90639365"),                                                               
+      nickname: '최서원',
+      profileImageUrl: 'http://th-p.talk.kakao.co.kr/th/talkp/wlQmx4YTIq/pGIKojFefInqxvsl6jtKT
+0/049wv6_110x110_c.jpg',
+      fullProfileImageUrl: 'http://th-p.talk.kakao.co.kr/th/talkp/wlQmx4YTIq/pGIKojFefInqxvsl6
+jtKT0/049wv6_640x640_s.jpg',
+      originalProfileImageUrl: 'http://p.talk.kakao.co.kr/talkp/wlQmx4YTIq/pGIKojFefInqxvsl6jt
+KT0/049wv6.jpg',
+      type: -999999,
+      accountId: Long("32216091"),                                                            
+      linkedService: undefined,                                                               
+      statusMessage: '',
+      openToken: undefined,                                                                   
+      memberType: undefined,                                                                  
+      profileType: undefined,                                                                 
+      linkId: undefined,                                                                      
+      pv: undefined                                                                           
+    }                                                                                         
+  }                                                                                           
+]
+
+
+
+
+
 
 ---------------profile---------------                                                         
 {                                                                                             

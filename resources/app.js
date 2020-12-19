@@ -167,7 +167,7 @@ $(document).ready(function () {
 
     // Responsive media query to remove appbar in smaller screen on initial load & resize
     function checkSize(){
-        if ($(window).width() <= 1200){	
+        if ($(window).width() <= 768){	
             $(".appbar").addClass("appbar-hidden");
         } else{
             $(".appbar").removeClass("appbar-hidden");

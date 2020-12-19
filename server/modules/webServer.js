@@ -1,4 +1,5 @@
 const CM = require('./chatManager.js');
+const Long = require('long');
 
 const express = require('express');
 const app = express();
@@ -66,8 +67,7 @@ this.chatManager = async chat => {
   let isSenderSeenBefore = await CM.checkSenderSeenBefore(chat);
   await CM.addChatLog(chat);
   
-  if(chat.sender.id != process.env.MY_UserID)
-    io.emit('chat', { sender: chat.sender.id, channel: chat.channel.id, logId: chat.logId, sendTime: chat.sendTime , text: chat.text });
+  io.emit('chat', { sender: chat.sender.id, channel: chat.channel.id, logId: chat.logId, sendTime: chat.sendTime , text: chat.text });
   
 }
 

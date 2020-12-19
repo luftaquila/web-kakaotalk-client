@@ -21,7 +21,7 @@ client.login(process.env.TalkClientLoginID, process.env.TalkClientLoginPW, true)
 
 async function main() {
   console.log('Login successful. Main client is in startup.');
-  require('./modules/webServer.js'); // deploy express and socket server
+  const WS = require('./modules/webServer.js'); // deploy express and socket server
   /*
   // Update friends list
   console.log(client.Auth.getLatestAccessData())
@@ -34,7 +34,7 @@ async function main() {
   
   // Incoming message event handler
   client.on('message', async chat => {
-    require('./modules/webServer.js').chatManager(chat);
+    WS.chatManager(chat);
   });
   
   // Message read event handler

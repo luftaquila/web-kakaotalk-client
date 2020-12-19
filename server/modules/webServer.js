@@ -11,6 +11,7 @@ const webserver = app.listen(9731, async _ => {
   console.log('Web server deployed. Listening on port 9731.');
 });
 const io = require('socket.io')(webserver);
+
 /*
 //https://github.com/storycraft/node-kakao/search?q=mark MARK READ
 
@@ -20,9 +21,7 @@ let channel = await target.result.sendText('test'); // returns chat class
 let targetChannel = await client.channelManager.map.get('293729341839798').sendText('hi')//.createDM()
 */
 
-app.get('/', async (req, res) => {
-  
-});
+app.get('/', async (req, res) => { });
 
 app.post('/login', (req, res) => {
   if(req.body.id === process.env.clientID && req.body.pw === process.env.clientPW) {

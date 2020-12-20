@@ -84,6 +84,24 @@ io.on('connection', async socket => {
     const chatLog = await CM.query('SELECT * FROM ' + pool.escapeId(String(data.channelId)) + ' ORDER BY `sendTime` DESC LIMIT 50;');
     callback(chatLog);
   });
+  
+  socket.on('requestChatSend', async (data, callback) => {
+    
+    // mark read before chats
+    
+    const target = await client.channelManager.map.get(data.channel);
+    const result = target ? await target.sendText(data.text) : 'no target';
+    const response = {
+      type: result.constructor.name,
+      logId: Long.fromValue(result.logId).toString(),
+      messageId: result.messageId,
+      sendTime: result.sendTime,
+      channel: Long.fromValue(result.channel.id).toString(),
+      text: result.text
+    }
+    await CM.addChatLog(result);
+    callback(response);
+  });
 });
 
 

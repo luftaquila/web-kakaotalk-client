@@ -18,6 +18,7 @@ $(_ => {
 });
 
 function main() {
+  eventListener();
   socket = io.connect('https://luftaquila.io', { path: "/kakao/socket", query: `token=${jwt}` });
   //socket.on('connect_error', _ => window.location.href = '/kakao' );
   socket.on('connect', _ => { });
@@ -59,7 +60,6 @@ function main() {
     
     // update message if chatroom is opened
     if(data.channel == $('div#chatroom').attr('data-channelid')) {
-      console.log('opened');
       const lastChatDayBox = $('div#messageBody div.container div.message-day:last-child div.message-divider');
       if(lastChatDayBox.attr('data-label') == new Date(data.sendTime * 1000).format('yyyy. m. d')) {
         lastChatDayBox.parent().append(messageTemplate(data));
@@ -108,11 +108,51 @@ function renderChannelTab(channelList) {
     scrollToChatEnd();
     
     $(".main").addClass("main-visible");
-    $('[data-close]').click(function (e) {
+    $('[data-close]').click(function(e) {
       e.preventDefault();
       $(".main").removeClass("main-visible");
     });
+    $("#transmit").click(function(e) {
+      e.preventDefault();
+      transmitChat();
+    });
   });
+}
+
+function transmitChat() {
+  socket.emit('requestChatSend', { channel: $('div#chatroom').attr('data-channelid'), text: $('textarea#messageInput').val() }, res => {
+    if(res.sendTime) {
+      
+      const lastChatDayBox = $('div#messageBody div.container div.message-day:last-child div.message-divider');
+      if(lastChatDayBox.attr('data-label') == new Date(res.sendTime * 1000).format('yyyy. m. d')) {
+        lastChatDayBox.parent().append(messageTemplate(res));
+      }
+      else {
+        const newMessageDay = `
+          <!-- Message Day Start -->
+            <div class="message-day">
+              <div class="message-divider sticky-top pb-2" data-label="${new Date(res.sendTime * 1000).format('yyyy. m. d')}">&nbsp;</div>
+            </div>
+            <!-- Message Day End -->`;
+        lastChatDayBox.parent().parent().append(newMessageDay);
+        $('div.message-day:last-child').append(messageTemplate(res));
+      }
+      scrollToChatEnd();
+      
+    }
+  });
+}
+
+function eventListener() {
+  const keys = {};
+  window.addEventListener("keydown", function(e) {
+    keys[e.keyCode] = true;
+    if($('textarea#messageInput').is(':focus') && !keys[16] && keys[13]) {
+      e.preventDefault();
+      transmitChat();
+    }
+  });
+  window.addEventListener('keyup', function(e) { delete keys[e.keyCode] });
 }
 
 function scrollToChatEnd() {

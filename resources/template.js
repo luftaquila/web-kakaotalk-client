@@ -211,7 +211,7 @@ async function chatContent(channelId) {
         </div>
       </div>
       <textarea class="form-control emojionearea-form-control" id="messageInput" rows="1" placeholder="Type your message here..."></textarea>
-      <div class="btn btn-primary btn-icon send-icon rounded-circle text-light mb-1" style="transform: scale(0.7);" role="button">
+      <div class="btn btn-primary btn-icon send-icon rounded-circle text-light mb-1" style="transform: scale(0.7);" role="button" id="transmit">
         <svg class="hw-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
         </svg>
@@ -306,6 +306,9 @@ async function chatBodyGenerator(channelId) {
 
 function messageTemplate(chat) {
   const isMyself = chat.sender == Long.fromValue(initData.myInfo.id).toString();
+  const sender = getUserInfo(chat.senderId);
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  sender.profileImageUrl = sender.profileImageUrl ? sender.profileImageUrl : null;
   return `
     <!-- Message Start -->
     <div class="message ${ isMyself ? 'self' : ''}">
@@ -313,7 +316,7 @@ function messageTemplate(chat) {
         <div class="message-content"><span>${chat.text}</span></div>
       </div>
       <div class="message-options">
-        <div class="avatar avatar-sm bg-info text-light">${ isMyself ? `<img src="/kakao/data/myself/profile.jpg" alt="">` : (getUserInfo(chat.senderId).profileImageUrl ? `<img src="/kakao/data/user/${chat.senderId}/profile.jpg" alt="">` : '<span style="box-shadow: 0 0 0 0.5rem #fff;"><i class="fad fa-user"></i></span>')}</div>
+        <div class="avatar avatar-sm bg-info text-light">${ isMyself ? `<img src="/kakao/data/myself/profile.jpg" alt="">` : (sender.profileImageUrl ? `<img src="/kakao/data/user/${chat.senderId}/profile.jpg" alt="">` : '<span style="box-shadow: 0 0 0 0.5rem #fff;"><i class="fad fa-user"></i></span>')}</div>
         <span class="message-date">${new Date(chat.sendTime * 1000).format('HH:MM')}</span>
         <span class="message-status">${''}</span>
         <div class="dropdown">

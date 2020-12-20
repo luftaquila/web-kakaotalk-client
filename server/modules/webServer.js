@@ -52,10 +52,38 @@ io.use(socketJWT.authorize({
 io.on('connection', async socket => {
   const channelList = await CM.query('SELECT * FROM `chatChannelList`;');
   const friendsList = await CM.query('SELECT * FROM `friendsList`;');
-  io.emit('init', { channelList: channelList, friendsList: friendsList });
+  io.emit('init', {
+    channelList: channelList,
+    friendsList: friendsList,
+    myInfo: {
+      id: client.clientUser.id,
+      serviceUserId: client.clientUser.mainUserInfo.settings.serviceUserId,
+      nickName: client.clientUser.mainUserInfo.settings.nickName,
+      statusMessage: client.clientUser.mainUserInfo.settings.statusMessage,
+      profileImageUrl: client.clientUser.mainUserInfo.settings.profileImageUrl,
+      fullProfileImageUrl: client.clientUser.mainUserInfo.settings.fullProfileImageUrl,
+      originalProfileImageUrl: client.clientUser.mainUserInfo.settings.originalProfileImageUrl,
+      uuid: client.clientUser.mainUserInfo.settings.uuid,
+      pstnNumber: client.clientUser.mainUserInfo.settings.pstnNumber,
+      formattedPstnNumber: client.clientUser.mainUserInfo.settings.formattedPstnNumber,
+      nsnNumber: client.clientUser.mainUserInfo.settings.nsnNumber,
+      formattedNsnNumber: client.clientUser.mainUserInfo.settings.formattedNsnNumber,
+      accountDisplayId: client.clientUser.mainUserInfo.settings.accountDisplayId
+    }
+  });
   //socket.decoded_token
   // send all chat data(x)
   // send table chatList: chatList table must have unread message counts
+  
+  socket.on('requestChannelInfo', async (data, callback) => {
+    const channelInfo = await CM.query('SELECT * FROM `chatChannelList` WHERE `channelId`=' + pool.escape(data.channelId) + ';');
+    callback(channelInfo[0]);
+  });
+  
+  socket.on('requestChatLog', async (data, callback) => {
+    const chatLog = await CM.query('SELECT * FROM ' + pool.escapeId(String(data.channelId)) + ' ORDER BY `sendTime` DESC LIMIT 50;');
+    callback(chatLog);
+  });
 });
 
 
@@ -67,8 +95,7 @@ this.chatManager = async chat => {
   let isSenderSeenBefore = await CM.checkSenderSeenBefore(chat);
   await CM.addChatLog(chat);
   
-  io.emit('chat', { sender: chat.sender.id, channel: chat.channel.id, logId: chat.logId, sendTime: chat.sendTime , text: chat.text });
-  
+  io.emit('chat', { sender: chat.sender.id, channel: chat.channel.id, logId: chat.logId, sendTime: chat.sendTime , text: chat.text, unread: chat.channel.dataStruct.newMessageCount });
 }
 
 this.readManager = (channel, reader, readChatLogId) => {

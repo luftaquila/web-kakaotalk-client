@@ -19,7 +19,7 @@ $(_ => {
 
 function main() {
   socket = io.connect('https://luftaquila.io', { path: "/kakao/socket", query: `token=${jwt}` });
-  socket.on('connect_error', _ => window.location.href = '/kakao' );
+  //socket.on('connect_error', _ => window.location.href = '/kakao' );
   socket.on('connect', _ => { });
   socket.on('init', data => {
     initData = data;
@@ -27,7 +27,55 @@ function main() {
     renderChannelTab(data.channelList);
   });
   socket.on('chat', data => {
-    console.log(data);
+    data.sender = Long.fromValue(data.sender).toString();
+    data.channel = Long.fromValue(data.channel).toString();
+    data.logId = Long.fromValue(data.logId).toString();
+    
+    // if channel is rendered before
+    if(initData.channelList.find(o => o.channelId == data.channel)) {
+      const target = $('ul#chatContactTab li[data-channelid="' + data.channel + '"]');
+      target.find('div.chat-time').text(new Date(data.sendTime * 1000).format('HH:MM'));
+      target.find('p.text-truncate').text(data.text);
+      $('ul#chatContactTab li:first-child').before(target);
+      target.attr('data-lastchattime', data.sendTime);
+    }
+    else { // if channel is not rendered before: new appeared
+      socket.emit('requestChannelInfo', { channelId: data.channel }, res => {
+        $('ul#chatContactTab').prepend(channelTabContent(res));
+      });
+    }
+    
+    // render unread Count badge
+    const target = $('ul#chatContactTab li[data-channelid="' + data.channel + '"]');
+    if(data.unread) {
+      target.addClass('unread');
+      if(target.find('div.badge').not('div#mychatbadge').length) target.find('div.badge').not('div#mychatbadge').text(data.unread);
+      else target.find('div.contacts-texts').append(`<div class="badge badge-rounded badge-primary ml-1">${data.unread}</div>`);
+    }
+    else {
+      target.removeClass('unread');
+      target.find('div.badge').not('div#mychatbadge').remove();
+    }
+    
+    // update message if chatroom is opened
+    if(data.channel == $('div#chatroom').attr('data-channelid')) {
+      console.log('opened');
+      const lastChatDayBox = $('div#messageBody div.container div.message-day:last-child div.message-divider');
+      if(lastChatDayBox.attr('data-label') == new Date(data.sendTime * 1000).format('yyyy. m. d')) {
+        lastChatDayBox.parent().append(messageTemplate(data));
+      }
+      else {
+        const newMessageDay = `
+          <!-- Message Day Start -->
+            <div class="message-day">
+              <div class="message-divider sticky-top pb-2" data-label="${new Date(data.sendTime * 1000).format('yyyy. m. d')}">&nbsp;</div>
+            </div>
+            <!-- Message Day End -->`;
+        lastChatDayBox.parent().parent().append(newMessageDay);
+        $('div.message-day:last-child').append(messageTemplate(data));
+      }
+      scrollToChatEnd();
+    }
   });
 }
 
@@ -51,12 +99,27 @@ function renderChannelTab(channelList) {
   for(let channel of channelList) target.append(channelTabContent(channel));
   
   // channel click event listener
-  $('a.contacts-link').click(function() {
-    const channelId = $(this).data('channelid');
+  $('ul#chatContactTab li.contacts-item').click(async function() {
+    $('ul#chatContactTab li.contacts-item').removeClass('active');
+    $(this).addClass('active');
+    const channelId = $(this).attr('data-channelid');
     $('div#chatintro').attr('style', 'display:none!important');
-    $('div#chatroom').css('display', 'flex').attr('data-channelid', channelId).html(chatContent(channelId));
+    $('div#chatroom').css('display', 'flex').attr('data-channelid', channelId).html(await chatContent(channelId));
+    scrollToChatEnd();
+    
+    $(".main").addClass("main-visible");
+    $('[data-close]').click(function (e) {
+      e.preventDefault();
+      $(".main").removeClass("main-visible");
+    });
   });
 }
 
+function scrollToChatEnd() {
+  document.querySelector('.chat-finished').scrollIntoView({
+      block: 'end',
+      behavior: 'auto' //"auto"  | "instant" | "smooth",
+  });
+}
 function getUserInfo(userId) { return initData.friendsList.find(o => o.userId == userId); }
 function getChannelInfo(channelId) { return initData.channelList.find(o => o.channelId == channelId); }

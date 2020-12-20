@@ -11238,19 +11238,23 @@ button.close:focus {
 }
 
 .message {
-	margin-bottom: 1.25rem;
+	margin-bottom: 0.5rem;
 	font-size: .875rem
 }
 
 .message .message-content {
-	padding: 1rem 2.25rem;
-	background-color: #f5f6fa;
-	color: #8094ae;
+  padding: 0.5rem 1.5rem 0.5rem 2.3rem;
+	background-color: #dfe0e6;
+	color: #5c646e;
 	margin-left: 1.25rem;
 	border-radius: 1.25rem;
 	text-align: left;
 	display: inline-block;
 	max-width: 25rem
+}
+
+.message.self .message-content {
+  padding: 0.5rem 2.3rem 0.5rem 1.5rem;
 }
 
 .message .message-content .message-attachment {

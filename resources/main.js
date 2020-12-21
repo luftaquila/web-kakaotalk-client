@@ -122,6 +122,14 @@ function renderChannelTab(channelList) {
 function transmitChat() {
   socket.emit('requestChatSend', { channel: $('div#chatroom').attr('data-channelid'), text: $('textarea#messageInput').val() }, res => {
     if(res.sendTime) {
+      $('textarea#messageInput').val(''); // empty input field
+      
+      // update channelist
+      const target = $('ul#chatContactTab li[data-channelid="' + res.channel + '"]');
+      target.find('div.chat-time').text(new Date(res.sendTime * 1000).format('HH:MM'));
+      target.find('p.text-truncate').text(res.text);
+      $('ul#chatContactTab li:first-child').before(target);
+      target.attr('data-lastchattime', res.sendTime);
       
       const lastChatDayBox = $('div#messageBody div.container div.message-day:last-child div.message-divider');
       if(lastChatDayBox.attr('data-label') == new Date(res.sendTime * 1000).format('yyyy. m. d')) {
@@ -138,7 +146,6 @@ function transmitChat() {
         $('div.message-day:last-child').append(messageTemplate(res));
       }
       scrollToChatEnd();
-      
     }
   });
 }

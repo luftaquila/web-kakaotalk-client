@@ -72,8 +72,6 @@ io.on('connection', async socket => {
     }
   });
   //socket.decoded_token
-  // send all chat data(x)
-  // send table chatList: chatList table must have unread message counts
   
   socket.on('requestChannelInfo', async (data, callback) => {
     const channelInfo = await CM.query('SELECT * FROM `chatChannelList` WHERE `channelId`=' + pool.escape(data.channelId) + ';');
@@ -87,7 +85,7 @@ io.on('connection', async socket => {
   
   socket.on('requestChatSend', async (data, callback) => {
     
-    // mark read before chats
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! mark read before send chat
     
     const target = await client.channelManager.map.get(data.channel);
     const result = target ? await target.sendText(data.text) : 'no target';
@@ -99,14 +97,17 @@ io.on('connection', async socket => {
       channel: Long.fromValue(result.channel.id).toString(),
       text: result.text
     }
-    await CM.addChatLog(result);
+    await CM.addChatLog(result); // add sent chatlog to DB.
     callback(response);
+  });
+  
+  socket.on('requestMarkRead', async (data, callback) => {
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! mark read target channelId
   });
 });
 
 
 this.chatManager = async chat => {
-  // maybe sent from node-kakao client doesn't make chat event. self addition to DB required.
   console.log(chat.text);
   
   let isChannelSeenBefore = await CM.checkChannelSeenBefore(chat);

@@ -84,8 +84,9 @@ io.on('connection', async socket => {
   });
   
   socket.on('requestChatSend', async (data, callback) => {
-    
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! mark read before send chat
+    // mark read before send chat
+    const targetChannel = client.channelManager.map.get(data.channel);
+    await targetChannel.markChannelRead(targetChannel.lastChat.logId);
     
     const target = await client.channelManager.map.get(data.channel);
     const result = target ? await target.sendText(data.text) : 'no target';
@@ -102,13 +103,15 @@ io.on('connection', async socket => {
   });
   
   socket.on('requestMarkRead', async (data, callback) => {
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! mark read target channelId
+    // mark read target channel with channelId
+    const targetChannel = client.channelManager.map.get(data.channelId);
+    await targetChannel.markChannelRead(targetChannel.lastChat.logId);
   });
 });
 
 
 this.chatManager = async chat => {
-  console.log(chat.text);
+  //console.log(chat.text);
   
   let isChannelSeenBefore = await CM.checkChannelSeenBefore(chat);
   let isSenderSeenBefore = await CM.checkSenderSeenBefore(chat);

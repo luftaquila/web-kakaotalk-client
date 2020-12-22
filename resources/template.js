@@ -374,7 +374,7 @@ function messageTemplate(chat) {
         <div class="message-content"><span>${chat.text}</span></div>
       </div>
       <div class="message-options">
-        <div class="avatar avatar-sm bg-info text-light">${ isMyself ? `<img src="/kakao/data/myself/profile.jpg" alt="">` : (sender.profileImageUrl ? `<img src="/kakao/data/user/${chat.senderId}/profile.jpg" alt="">` : '<span style="box-shadow: 0 0 0 0.5rem #fff;"><i class="fad fa-user"></i></span>')}</div>
+        <div class="avatar avatar-sm bg-info text-light">${ isMyself ? `<img src="/kakao/data/myself/profile.jpg" alt="">` : (sender && sender.profileImageUrl ? `<img src="/kakao/data/user/${chat.senderId}/profile.jpg" alt="">` : '<span style="box-shadow: 0 0 0 0.5rem #fff;"><i class="fad fa-user"></i></span>')}</div>
         <span class="message-date">${new Date(chat.sendTime * 1000).format('HH:MM')}</span>
         <span class="message-status">${''}</span>
         <div class="dropdown">
